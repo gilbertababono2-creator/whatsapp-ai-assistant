@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import { handleIncomingMessage } from "./ai.js";
 import { sendWhatsAppMessage } from "./twilio.js";
 import { checkSubscription } from "./payments.js";
-import { initFirebase } from "./firebase.js";
+//import { initFirebase } from "./firebase.js";
 import { db } from "./firebase.js";
 
 const app = express();

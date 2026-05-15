@@ -50,12 +50,12 @@ Always respect subscription limits. Respond empathetically when user vents.
 }
  import { db as firebaseDb, saveMessage as firebaseSaveMessage } from "./firebase.js";
 
-const handleIncomingMessage = async (msg, from) => {
+let handleIncomingMessage = async (msg, from) => {
   await saveMessage(msg, from);
   console.log("Message saved to Firestore ✅");
   
 // Use firebaseSaveMessage for Firestore
-const handleIncomingMessage = async (msg, from) => {
+let handleIncomingMessage = async (msg, from) => {
   await firebaseSaveMessage(msg, from);
 };
 

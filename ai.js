@@ -24,7 +24,8 @@ const saveMessage = async (message, sender) => {
   });
 };
 
-export { db, saveMessage };admin.initializeAppimport OpenAI from "openai";
+export { db, saveMessage };admin.initializeApp;
+import OpenAI from "openai";
 import { db, saveMessage } from "./firebase.js";
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });

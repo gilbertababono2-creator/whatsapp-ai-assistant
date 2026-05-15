@@ -48,9 +48,14 @@ Always respect subscription limits. Respond empathetically when user vents.
 
   return response.choices[0].message.content;
 }
- import { db as firebaseDb, saveMessage } from "./firebase.js";
+ import { db as firebaseDb, saveMessage as firebaseSaveMessage } from "./firebase.js";
 
 const handleIncomingMessage = async (msg, from) => {
   await saveMessage(msg, from);
   console.log("Message saved to Firestore ✅");
+  
+// Use firebaseSaveMessage for Firestore
+const handleIncomingMessage = async (msg, from) => {
+  await firebaseSaveMessage(msg, from);
 };
+

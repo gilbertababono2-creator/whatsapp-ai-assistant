@@ -48,7 +48,7 @@ Always respect subscription limits. Respond empathetically when user vents.
 
   return response.choices[0].message.content;
 }
-import { db, saveMessage } from "./firebase.js";
+//import { db, saveMessage } from "./firebase.js";
 
 const handleIncomingMessage = async (msg, from) => {
   await saveMessage(msg, from);

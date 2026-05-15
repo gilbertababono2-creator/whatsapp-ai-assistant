@@ -1,36 +1,37 @@
+import { db as firebaseDb, saveMessage as firebaseSaveMessage } from "./firebase.js";
 import OpenAI from "openai";
-import admin from "firebase-admin";
 
-const serviceAccount = {
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-  privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+// Initialize OpenAI client
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+// Single unified function to handle incoming WhatsApp messages
+const handleIncomingMessage = async (msg, from) => {
+  try {
+    // Save message to Firestore using the aliased function
+    await firebaseSaveMessage(msg, from);
+    console.log("Message saved to Firestore ✅");
+
+    // Generate AI response using GPT-4
+    const response = await client.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        { role: "system", content: "You are Gilbert's empathetic AI assistant. Capabilities: reminders, email summaries, web search, calendar events, expense tracking, automation rules, empathetic responses, and subscription enforcement." },
+        { role: "user", content: msg }
+      ]
+    });
+
+    // Return the assistant's reply
+    return response.choices[0].message.content;
+
+  } catch (error) {
+    console.error("Error in handleIncomingMessage:", error);
+    return "Sorry, something went wrong while processing your message.";
+  }
 };
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-  });
-}
-
-const db = admin.firestore();
-
-// Helper function to save WhatsApp messages
-const saveMessage = async (message, sender) => {
-  await db.collection("messages").add({
-    sender: sender,
-    text: message,
-    createdAt: new Date()
-  });
-};
-
-export { db, saveMessage };admin.initializeApp;
-
-
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-export async function handleIncomingMessage(userId, text) {
-  await saveMessage(userId, text);
+export { handleIncomingMessage };
 
   const systemPrompt = `
 You are Gilbert's empathetic AI assistant. 
@@ -38,23 +39,4 @@ Capabilities: reminders, email summaries, calendar, expense tracking, automation
 Always respect subscription limits. Respond empathetically when user vents.
 `;
 
-  const response = await client.chat.completions.create({
-    model: "gpt-4",
-    messages: [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: text },
-    ],
-  });
-
-  return response.choices[0].message.content
-  };
-import { db as firebaseDb, saveMessage as firebaseSaveMessage } from "./firebase.js";1
-
-// ✅ Only ONE function definition
-const handleIncomingMessage = async (msg, from) => {
-  // Save to Firestore using the aliased function
-  await firebaseSaveMessage(msg, from);
-
-export { handleIncomingMessage };
-
-
+  

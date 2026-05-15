@@ -5,6 +5,7 @@ import { sendWhatsAppMessage } from "./twilio.js";
 import { checkSubscription } from "./payments.js";
 import { initFirebase } from "./firebase.js";
 import { db } from "./firebase.js";
+
 const app = express();
 app.use(bodyParser.json());
 initFirebase();

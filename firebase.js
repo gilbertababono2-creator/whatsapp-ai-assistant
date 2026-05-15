@@ -1,3 +1,4 @@
+
 import admin from "firebase-admin";
 
 const serviceAccount = {
@@ -14,4 +15,13 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-export { db };
+// Helper function to save WhatsApp messages
+const saveMessage = async (message, sender) => {
+  await db.collection("messages").add({
+    sender: sender,
+    text: message,
+    createdAt: new Date()
+  });
+};
+
+export { db, saveMessage };

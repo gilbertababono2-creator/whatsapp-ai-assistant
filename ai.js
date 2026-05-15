@@ -46,16 +46,15 @@ Always respect subscription limits. Respond empathetically when user vents.
     ],
   });
 
-  return response.choices[0].message.content;
-}
- import { db as firebaseDb, saveMessage as firebaseSaveMessage } from "./firebase.js";
+  return response.choices[0].message.content
+  };
+import { db as firebaseDb, saveMessage as firebaseSaveMessage } from "./firebase.js";1
 
-let handleIncomingMessage = async (msg, from) => {
-  await saveMessage(msg, from);
-  console.log("Message saved to Firestore ✅");
-  
-// Use firebaseSaveMessage for Firestore
-let handleIncomingMessage = async (msg, from) => {
+// ✅ Only ONE function definition
+const handleIncomingMessage = async (msg, from) => {
+  // Save to Firestore using the aliased function
   await firebaseSaveMessage(msg, from);
-};
+
+export { handleIncomingMessage };
+
 
